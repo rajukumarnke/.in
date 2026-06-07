@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Student Portal</title>
+    <style>
+        /* Tiranga Animated Background */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #FF9933, #FFFFFF, #138808, #FF9933);
+            background-size: 400% 400%;
+            animation: tirangaBg 12s ease infinite;
+        }
+
+        @keyframes tirangaBg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Container Style */
+        .form-container {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 750px;
+            margin: 30px 20px;
+            box-sizing: border-box;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .hidden { display: none !important; }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 26px;
+            border-bottom: 3px solid #138808;
+            padding-bottom: 8px;
+        }
+
+        /* Section Titles (Personal, Contact, Academic) */
+        .section-title {
+            font-size: 16px;
+            color: #138808;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed #FF9933;
+        }
+
+        /* 2-Column Grid Layout */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px 25px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #444;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #FF9933;
+            box-shadow: 0 0 8px rgba(255, 153, 51, 0.4);
+            outline: none;
+        }
+
+        /* DOB & Name Row Grouping */
+        .row-group {
+            display: flex;
+            gap: 8px;
+        }
+        .row-group input, .row-group select { flex: 1; min-width: 0; }
+
+        .mobile-prefix {
+            width: 55px !important;
+            text-align: center;
+            background-color: #eee;
+            font-weight: bold;
+        }
+
+        .radio-check-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding-top: 8px;
+        }
+
+        .radio-check-group label {
+            font-weight: normal;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Photo Upload Design */
+        .preview-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #fdfdfd;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px dashed #ccc;
+        }
+
+        .image-preview-container {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #138808;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #eee;
+            flex-shrink: 0;
+        }
+
+        .image-preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Buttons & Divides */
+        .btn-primary {
+            background: linear-gradient(to right, #FF9933, #138808);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(19, 136, 8, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #138808;
+            border: 2px solid #138808;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover { background: #138808; color: white; }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0 10px 0;
+            font-size: 13px;
+            color: #666;
+            position: relative;
+        }
+        .divider::before, .divider::after {
+            content: ""; position: absolute; top: 50%; width: 30%; height: 1px; background-color: #ccc;
+        }
+        .divider::before { left: 0; } .divider::after { right: 0; }
+
+        .forgot-link { text-align: right; margin-top: -10px; margin-bottom: 15px; }
+        .forgot-link a { color: #FF9933; text-decoration: none; font-size: 13px; font-weight: 600; }
+
+        .otp-container { display: flex; justify-content: center; gap: 15px; margin: 20px 0; }
+        .otp-box { width: 50px; height: 50px; text-align: center; font-size: 22px; font-weight: bold; border: 2px solid #ccc; border-radius: 8px; }
+        .otp-box:focus { border-color: #138808; outline: none; }
+        .info-text { font-size: 14px; color: #555; text-align: center; line-height: 1.5; }
+
+        @media (max-width: 650px) {
+            .grid-layout { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        
+        <div id="registerPage">
+            <h2>Student Registration Form</h2>
+            <form onsubmit="handleRegister(event)">
+                
+                <div class="section-title">Personal Details</div>
+                <div class="grid-layout">
+                    
+                    <div class="form-group">
+                        <label>Roll no. :</label>
+                        <input type="text" required placeholder="Enter roll number">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Student name :</label>
+                        <div class="row-group">
+                            <input type="text" placeholder="First Name" required>
+                            <input type="text" placeholder="Last Name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Father's name :</label>
+                        <input type="text" required placeholder="Enter father's name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date of birth :</label>
+                        <div class="row-group">
+                            <input type="number" placeholder="DD" min="1" max="31" required>
+                            <input type="number" placeholder="MM" min="1" max="12" required>
+                            <input type="number" placeholder="YYYY" min="1990" max="2026" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gender :</label>
+                        <div class="radio-check-group">
+                            <label><input type="radio" name="gender" required> Male</label>
+                            <label><input type="radio" name="gender"> Female</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Student photo :</label>
+                        <div class="preview-wrapper">
+                            <div class="image-preview-container">
+                                <span style="font-size:9px; color:#888;" id="noImageText">No Photo</span>
+                                <img id="avatar" class="hidden" alt="Student Photo">
+                            </div>
+                            <input type="file" accept="image/*" onchange="previewPhoto(this)" required style="font-size: 11px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">Contact Information</div>
+                <div class="grid-layout">
+                    
+                    <div class="form-group">
+                        <label>Mobile no. :</label>
+                        <div class="row-group">
+                            <input type="text" value="+91" class="mobile-prefix" readonly>
+                            <input type="text" placeholder="10 digit number" pattern="[0-9]{10}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email id :</label>
+                        <input type="email" required placeholder="name@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password :</label>
+                        <input type="password" required placeholder="Create login password">
+                    </div>
+
+                    <div class="form-group">
+                        <label>City :</label>
+                        <input type="text" required placeholder="Enter your city">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Address :</label>
+                        <textarea rows="2" required placeholder="Enter full permanent address"></textarea>
+                    </div>
+                </div>
+
+                <div class="section-title">Academic Details</div>
+                <div class="grid-layout">
+                    
+                    <div class="form-group">
+                        <label>Department :</label>
+                        <div class="radio-check-group">
+                            <label><input type="checkbox"> CSE</label>
+                            <label><input type="checkbox"> IT</label>
+                            <label><input type="checkbox"> ECE</label>
+                            <label><input type="checkbox"> Civil</label>
+                            <label><input type="checkbox"> Mech</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Course :</label>
+                        <select required>
+                            <option value="" disabled selected>---------- Select Course ----------</option>
+                            <option value="Diploma">Diploma</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="M.Tech">M.Tech</option>
+                            <option value="BCA">BCA</option>
+                            <option value="MCA">MCA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="full-width">
+                    <button type="submit" class="btn-primary">Register Student</button>
+                    <div class="divider">Already have an account?</div>
+                    <button type="button" class="btn-secondary" onclick="switchPage('loginPage')">Login here</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="loginPage" class="hidden">
+            <h2>Student Login</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email ID / Roll No :</label>
+                    <input type="text" id="loginUser" required placeholder="Enter email or roll no">
+                </div>
+                <div class="form-group" style="margin-top: 15px;">
+                    <label>Password :</label>
+                    <input type="password" id="loginPass" required placeholder="Enter your password">
+                </div>
+                <div class="forgot-link" style="margin-top: 5px;">
+                    <a href="#" onclick="switchPage('forgotRequestPage')">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn-primary">Sign In</button>
+                <div class="divider">New Student?</div>
+                <button type="button" class="btn-secondary" onclick="switchPage('registerPage')">Create an Account</button>
+            </form>
+        </div>
+
+        <div id="forgotRequestPage" class="hidden">
+            <h2>Reset Password</h2>
+            <p class="info-text">Apna registered email address daalein. Hum uspar security OTP bhejenge.</p>
+            <form onsubmit="handleSendOTP(event)">
+                <div class="form-group">
+                    <label>Registered Email ID :</label>
+                    <input type="email" id="forgotEmail" required placeholder="yourmail@example.com">
+                </div>
+                <button type="submit" class="btn-primary">Send Verification OTP</button>
+                <button type="button" class="btn-secondary" onclick="switchPage('loginPage')">Back to Login</button>
+            </form>
+        </div>
+
+        <div id="forgotVerifyPage" class="hidden">
+            <h2>Enter OTP Code</h2>
+            <p class="info-text">Aapke email par 4-digit ka code bheja gaya hai.<br><strong style="color: #138808;">Demo Testing OTP: 4321</strong></p>
+            <form onsubmit="handleVerifyOTP(event)">
+                <div class="otp-container">
+                    <input type="text" class="otp-box" id="o1" maxlength="1" oninput="moveFocus(this, 'o2')" required>
+                    <input type="text" class="otp-box" id="o2" maxlength="1" oninput="moveFocus(this, 'o3')" required>
+                    <input type="text" class="otp-box" id="o3" maxlength="1" oninput="moveFocus(this, 'o4')" required>
+                    <input type="text" class="otp-box" id="o4" maxlength="1" required>
+                </div>
+                <button type="submit" class="btn-primary">Verify & Proceed</button>
+                <button type="button" class="btn-secondary" onclick="switchPage('forgotRequestPage')">Resend OTP</button>
+            </form>
+        </div>
+
+        <div id="forgotNewPassPage" class="hidden">
+            <h2>Set New Password</h2>
+            <form onsubmit="handleUpdatePassword(event)">
+                <div class="form-group">
+                    <label>New Password :</label>
+                    <input type="password" id="nPass" required placeholder="Enter new password">
+                </div>
+                <div class="form-group" style="margin-top: 15px;">
+                    <label>Confirm New Password :</label>
+                    <input type="password" id="cPass" required placeholder="Confirm new password">
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top: 20px;">Update Password</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // LIVE PHOTO PREVIEW
+        function previewPhoto(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgTag = document.getElementById('avatar');
+                    const textTag = document.getElementById('noImageText');
+                    imgTag.src = e.target.result;
+                    imgTag.classList.remove('hidden');
+                    textTag.classList.add('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Page Navigation
+        function switchPage(pageId) {
+            const pages = ['registerPage', 'loginPage', 'forgotRequestPage', 'forgotVerifyPage', 'forgotNewPassPage'];
+            const container = document.querySelector('.form-container');
+            container.style.opacity = '0.3';
+            container.style.transform = 'scale(0.98)';
+
+            setTimeout(() => {
+                pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+                document.getElementById(pageId).classList.remove('hidden');
+                container.style.opacity = '1';
+                container.style.transform = 'scale(1)';
+                if(pageId === 'forgotVerifyPage') document.getElementById('o1').focus();
+            }, 250);
+        }
+
+        function handleRegister(e) { e.preventDefault(); alert("🎉 Registration Successful! Chaliye ab login karte hain."); switchPage('loginPage'); }
+        function handleLogin(e) { e.preventDefault(); alert("🔐 Login Successful!"); }
+        function handleSendOTP(e) { e.preventDefault(); switchPage('forgotVerifyPage'); }
+        function moveFocus(current, nextId) { if(current.value.length >= 1) document.getElementById(nextId).focus(); }
+
+        function handleVerifyOTP(e) {
+            e.preventDefault();
+            const code = document.getElementById('o1').value + document.getElementById('o2').value + document.getElementById('o3').value + document.getElementById('o4').value;
+            if(code === "4321") { switchPage('forgotNewPassPage'); } else { alert("❌ Wrong OTP! Please use '4321'."); }
+        }
+
+        document.get
+        function handleUpdatePassword(e) {
+            e.preventDefault();
+            if(document.getElementById('nPass').value === document.getElementById('cPass').value) {
+                alert("🎉 Password updated successfully!"); switchPage('loginPage');
+            } else { alert("❌ Passwords do not match!"); }
+        }
+    </script>
+</body>
+</html>
+
